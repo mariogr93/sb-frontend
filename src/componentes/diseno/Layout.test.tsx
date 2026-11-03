@@ -1,12 +1,22 @@
 import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import { vi } from 'vitest'
 import { rutas } from '../../rutas'
 import { renderizarRutas } from '../../pruebas/utilidades'
+import { simularApisVacias } from '../../pruebas/simularApis'
 
-test('MuestraMenuYTituloDeLaRuta', () => {
+vi.mock('../../api/departamentosApi', () => ({ departamentosApi: { listar: vi.fn() } }))
+vi.mock('../../api/empleadosApi', () => ({ empleadosApi: { listar: vi.fn() } }))
+vi.mock('../../api/entidadesApi', () => ({ entidadesApi: { listar: vi.fn() } }))
+vi.mock('../../api/nominasApi', () => ({ nominasApi: { reporteSemanal: vi.fn(), listar: vi.fn() } }))
+vi.mock('../../api/usuariosApi', () => ({ usuariosApi: { listar: vi.fn() } }))
+
+beforeEach(simularApisVacias)
+
+test('MuestraMenuYTituloDeLaRuta', async () => {
   renderizarRutas(rutas, { rol: 'Admin', ruta: '/empleados' })
 
-  expect(screen.getByRole('heading', { name: 'Consulta de empleados' })).toBeInTheDocument()
+  expect(await screen.findByRole('heading', { name: 'Consulta de empleados' })).toBeInTheDocument()
   expect(screen.getByRole('link', { name: 'Inicio' })).toBeInTheDocument()
   expect(screen.getByRole('link', { name: 'Crear registro' })).toBeInTheDocument()
 })
@@ -23,10 +33,21 @@ test('BotonDeMenuAbreYElegirUnaOpcionLoCierra', async () => {
   expect(screen.getByRole('button', { name: 'Abrir menú' })).toHaveAttribute('aria-expanded', 'false')
 })
 
-test('UsuarioNoVeOpcionesDeAdministrador', () => {
+test('EscapeCierraElMenuYDevuelveElFocoAlBoton', async () => {
+  renderizarRutas(rutas, { rol: 'Admin', ruta: '/' })
+  const botonMenu = screen.getByRole('button', { name: 'Abrir menú' })
+  await userEvent.click(botonMenu)
+
+  await userEvent.keyboard('{Escape}')
+
+  expect(botonMenu).toHaveAttribute('aria-expanded', 'false')
+  expect(botonMenu).toHaveFocus()
+})
+
+test('UsuarioNoVeOpcionesDeAdministrador', async () => {
   renderizarRutas(rutas, { rol: 'Usuario', ruta: '/' })
 
-  expect(screen.getByRole('link', { name: 'Consulta' })).toBeInTheDocument()
+  expect(await screen.findByRole('link', { name: 'Consulta' })).toBeInTheDocument()
   expect(screen.queryByRole('link', { name: 'Crear registro' })).not.toBeInTheDocument()
   expect(screen.queryByRole('link', { name: 'Usuarios' })).not.toBeInTheDocument()
 })
