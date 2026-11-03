@@ -1,5 +1,6 @@
 import { Boton } from './Boton'
 import estilos from './Confirmacion.module.css'
+import { useFocoEnDialogo } from './useFocoEnDialogo'
 
 type Props = {
   titulo: string
@@ -11,9 +12,19 @@ type Props = {
 }
 
 export function Confirmacion({ titulo, mensaje, textoConfirmar = 'Confirmar', procesando, alConfirmar, alCancelar }: Props) {
+  const referencia = useFocoEnDialogo<HTMLDivElement>()
+
   return (
     <div className={estilos.fondo}>
-      <div role="dialog" aria-modal="true" aria-label={titulo} className={estilos.caja}>
+      <div
+        ref={referencia}
+        tabIndex={-1}
+        role="dialog"
+        aria-modal="true"
+        aria-label={titulo}
+        className={estilos.caja}
+        onKeyDown={(evento) => evento.key === 'Escape' && alCancelar()}
+      >
         <h2>{titulo}</h2>
         <p>{mensaje}</p>
         <div className={estilos.acciones}>

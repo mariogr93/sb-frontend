@@ -10,7 +10,7 @@ React + TypeScript + Vite, React Router, TanStack Query, React Hook Form + Zod, 
 
 ## Requisitos
 
-- Node.js 20 o superior
+- Node.js 22.22.2 o superior (o 24)
 - API en ejecución: `dotnet run --project src/SB.SistemaNomina.API --launch-profile http` (repositorio `sb-backend-api`)
 
 ## Ejecución

@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { mensajeError } from '../../api/errores'
 import { useAutenticacion } from '../../autenticacion/useAutenticacion'
@@ -56,6 +56,14 @@ export function ConsultaEmpleados() {
       },
       { replace: true },
     )
+
+  // Si la página pedida ya no existe (p. ej. se desactivó la última fila), vuelve a la última.
+  const paginaFueraDeRango = Boolean(data && data.totalElementos > 0 && data.elementos.length === 0)
+  const ultimaPagina = data?.totalPaginas ?? 1
+  useEffect(() => {
+    if (paginaFueraDeRango) actualizar({ pagina: String(ultimaPagina) })
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- `actualizar` solo depende de setParametros
+  }, [paginaFueraDeRango, ultimaPagina])
 
   const alCambiarNombre = (valor: string) => {
     setTextoNombre(valor)
@@ -139,7 +147,7 @@ export function ConsultaEmpleados() {
       {desactivar.isError && <Alerta>{mensajeError(desactivar.error)}</Alerta>}
       {isPending && <Cargando />}
       {isError && <Alerta>{mensajeError(error)}</Alerta>}
-      {data && data.elementos.length === 0 && <p>No hay empleados con esos filtros.</p>}
+      {data && data.totalElementos === 0 && <p>No hay empleados con esos filtros.</p>}
       {data && data.elementos.length > 0 && (
         <>
           <Tabla columnas={columnas} filas={data.elementos} clave={(empleado) => empleado.id} />

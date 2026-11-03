@@ -76,10 +76,16 @@
     overflow-y: auto;
     z-index: 20;
     transform: translateX(-100%);
-    transition: transform 0.2s ease;
+    /* Cerrado: fuera de la pantalla y fuera del orden de tabulación. */
+    visibility: hidden;
+    transition:
+      transform 0.2s ease,
+      visibility 0s linear 0.2s;
   }
 
   .abierta {
     transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.2s ease;
   }
 }

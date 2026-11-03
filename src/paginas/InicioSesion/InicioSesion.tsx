@@ -8,13 +8,17 @@ import { Alerta } from '../../componentes/comunes/Alerta'
 import { Boton } from '../../componentes/comunes/Boton'
 import { Campo } from '../../componentes/comunes/Campo'
 import logo from '../../recursos/SUPERINTENDENCIA_DE_BANCOS.png'
+import { rutaInterna } from '../../utilidades/rutas'
+import { REQUERIDO } from '../../utilidades/validaciones'
 import estilos from './InicioSesion.module.css'
 
-const REQUERIDO = 'Este campo es obligatorio.'
+// Mismos largos máximos que el servidor.
+const LONGITUD_MAXIMA_USUARIO = 100
+const LONGITUD_MAXIMA_CONTRASENA = 128
 
 const esquema = z.object({
-  nombreUsuario: z.string().trim().min(1, REQUERIDO),
-  contrasena: z.string().min(1, REQUERIDO),
+  nombreUsuario: z.string().trim().min(1, REQUERIDO).max(LONGITUD_MAXIMA_USUARIO, `Máximo ${LONGITUD_MAXIMA_USUARIO} caracteres.`),
+  contrasena: z.string().min(1, REQUERIDO).max(LONGITUD_MAXIMA_CONTRASENA, `Máximo ${LONGITUD_MAXIMA_CONTRASENA} caracteres.`),
 })
 
 type Datos = z.infer<typeof esquema>
@@ -24,7 +28,7 @@ export function InicioSesion() {
   const navegar = useNavigate()
   const ubicacion = useLocation()
   const formulario = useForm<Datos>({ resolver: zodResolver(esquema) })
-  const destino = (ubicacion.state as { desde?: string } | null)?.desde ?? '/'
+  const destino = rutaInterna((ubicacion.state as { desde?: unknown } | null)?.desde)
 
   if (sesion) return <Navigate to={destino} replace />
 

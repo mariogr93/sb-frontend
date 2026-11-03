@@ -1,4 +1,4 @@
-import { useState, type FormEvent } from 'react'
+import { useEffect, useState, type FormEvent } from 'react'
 import { mensajeError } from '../../api/errores'
 import { useAutenticacion } from '../../autenticacion/useAutenticacion'
 import { Alerta } from '../../componentes/comunes/Alerta'
@@ -23,6 +23,13 @@ export function EntidadesGubernamentales() {
   const [aDesactivar, setADesactivar] = useState<EntidadGubernamental | null>(null)
   const { data, isPending, isError, error } = useEntidades(filtro)
   const desactivar = useDesactivarEntidad()
+
+  // Si la página pedida ya no existe (p. ej. se desactivó la última fila), vuelve a la última.
+  const paginaFueraDeRango = Boolean(data && data.totalElementos > 0 && data.elementos.length === 0)
+  const ultimaPagina = data?.totalPaginas ?? 1
+  useEffect(() => {
+    if (paginaFueraDeRango) setFiltro((anterior) => ({ ...anterior, pagina: ultimaPagina }))
+  }, [paginaFueraDeRango, ultimaPagina])
 
   const buscar = (evento: FormEvent) => {
     evento.preventDefault()
@@ -71,19 +78,29 @@ export function EntidadesGubernamentales() {
   return (
     <div>
       <form className={estilos.barra} onSubmit={buscar}>
-        <input aria-label="Nombre" placeholder="Nombre" value={borrador.nombre} onChange={(e) => setBorrador({ ...borrador, nombre: e.target.value })} />
-        <input aria-label="Sector" placeholder="Sector" value={borrador.sector} onChange={(e) => setBorrador({ ...borrador, sector: e.target.value })} />
+        <input
+          aria-label="Nombre"
+          placeholder="Nombre"
+          value={borrador.nombre}
+          onChange={(evento) => setBorrador({ ...borrador, nombre: evento.target.value })}
+        />
+        <input
+          aria-label="Sector"
+          placeholder="Sector"
+          value={borrador.sector}
+          onChange={(evento) => setBorrador({ ...borrador, sector: evento.target.value })}
+        />
         <input
           aria-label="Poder del Estado"
           placeholder="Poder del Estado"
           value={borrador.poderDelEstado}
-          onChange={(e) => setBorrador({ ...borrador, poderDelEstado: e.target.value })}
+          onChange={(evento) => setBorrador({ ...borrador, poderDelEstado: evento.target.value })}
         />
         <label className={estilos.casilla}>
           <input
             type="checkbox"
             checked={borrador.incluirInactivas}
-            onChange={(e) => setBorrador({ ...borrador, incluirInactivas: e.target.checked })}
+            onChange={(evento) => setBorrador({ ...borrador, incluirInactivas: evento.target.checked })}
           />
           Incluir inactivas
         </label>
@@ -100,7 +117,7 @@ export function EntidadesGubernamentales() {
       {desactivar.isError && <Alerta>{mensajeError(desactivar.error)}</Alerta>}
       {isPending && <Cargando />}
       {isError && <Alerta>{mensajeError(error)}</Alerta>}
-      {data && data.elementos.length === 0 && <p>No hay entidades con esos filtros.</p>}
+      {data && data.totalElementos === 0 && <p>No hay entidades con esos filtros.</p>}
       {data && data.elementos.length > 0 && (
         <>
           <Tabla columnas={columnas} filas={data.elementos} clave={(entidad) => entidad.id} />

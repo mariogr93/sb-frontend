@@ -8,14 +8,14 @@ import { Cargando } from '../../componentes/comunes/Cargando'
 import { Paginacion } from '../../componentes/comunes/Paginacion'
 import { Tabla, type Columna } from '../../componentes/comunes/Tabla'
 import type { NominaResumen } from '../../tipos/nominas'
-import { formatearFecha, formatearMoneda } from '../../utilidades/formato'
+import { formatearFechaCalendario, formatearMoneda } from '../../utilidades/formato'
 import estilos from '../Paginas.module.css'
 import { useGuardarNomina, useNominas } from './consultasNominas'
 
 const TAMANO_PAGINA = 10
 
 const columnas: Columna<NominaResumen>[] = [
-  { titulo: 'Semana desde', celda: (nomina) => formatearFecha(nomina.fechaInicioSemana) },
+  { titulo: 'Semana desde', celda: (nomina) => formatearFechaCalendario(nomina.fechaInicioSemana) },
   { titulo: 'Guardada por', celda: (nomina) => nomina.creadoPor },
   { titulo: 'Empleados', alineacion: 'derecha', celda: (nomina) => nomina.cantidadEmpleados },
   { titulo: 'Monto total', alineacion: 'derecha', celda: (nomina) => formatearMoneda(nomina.montoTotal) },

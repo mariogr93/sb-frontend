@@ -8,20 +8,21 @@ import type { Rol } from '../tipos/usuarios'
 
 const UNA_HORA_EN_MILISEGUNDOS = 60 * 60 * 1000
 
-function sembrarSesion(rol: Rol) {
+export function sembrarSesion(rol: Rol, vigenciaMilisegundos = UNA_HORA_EN_MILISEGUNDOS) {
   almacenSesion.guardar({
     token: 'token-de-prueba',
-    fechaExpiracion: new Date(Date.now() + UNA_HORA_EN_MILISEGUNDOS).toISOString(),
+    fechaExpiracion: new Date(Date.now() + vigenciaMilisegundos).toISOString(),
     nombreUsuario: rol === 'Admin' ? 'admin' : 'consulta',
     nombreCompleto: rol === 'Admin' ? 'Administrador' : 'Usuario de consulta',
     rol,
   })
 }
 
-type Opciones = { rol?: Rol; ruta?: string }
+type Opciones = { rol?: Rol; ruta?: string; cliente?: QueryClient; vigenciaMilisegundos?: number }
 
-function envolver(hijos: ReactNode) {
-  const cliente = new QueryClient({ defaultOptions: { queries: { retry: false } } })
+export const crearClienteDePrueba = () => new QueryClient({ defaultOptions: { queries: { retry: false } } })
+
+function envolver(hijos: ReactNode, cliente: QueryClient) {
   return (
     <QueryClientProvider client={cliente}>
       <ProveedorAutenticacion>{hijos}</ProveedorAutenticacion>
@@ -30,15 +31,21 @@ function envolver(hijos: ReactNode) {
 }
 
 /** Renderiza un componente con consultas, sesión (si se indica `rol`) y router en memoria. */
-export function renderizarConProveedores(ui: ReactElement, { rol, ruta = '/' }: Opciones = {}) {
-  if (rol) sembrarSesion(rol)
-  return render(envolver(<MemoryRouter initialEntries={[ruta]}>{ui}</MemoryRouter>))
+export function renderizarConProveedores(
+  ui: ReactElement,
+  { rol, ruta = '/', cliente = crearClienteDePrueba(), vigenciaMilisegundos }: Opciones = {},
+) {
+  if (rol) sembrarSesion(rol, vigenciaMilisegundos)
+  return render(envolver(<MemoryRouter initialEntries={[ruta]}>{ui}</MemoryRouter>, cliente))
 }
 
 /** Renderiza una tabla de rutas completa (guardas, layout) en memoria. */
-export function renderizarRutas(rutas: RouteObject[], { rol, ruta = '/' }: Opciones = {}) {
-  if (rol) sembrarSesion(rol)
+export function renderizarRutas(
+  rutas: RouteObject[],
+  { rol, ruta = '/', cliente = crearClienteDePrueba(), vigenciaMilisegundos }: Opciones = {},
+) {
+  if (rol) sembrarSesion(rol, vigenciaMilisegundos)
   const enrutador = createMemoryRouter(rutas, { initialEntries: [ruta] })
-  render(envolver(<RouterProvider router={enrutador} />))
+  render(envolver(<RouterProvider router={enrutador} />, cliente))
   return enrutador
 }
