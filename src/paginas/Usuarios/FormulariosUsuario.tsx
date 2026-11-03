@@ -8,16 +8,26 @@ import { Boton } from '../../componentes/comunes/Boton'
 import { Campo } from '../../componentes/comunes/Campo'
 import { Modal } from '../../componentes/comunes/Modal'
 import { ROLES, type Usuario } from '../../tipos/usuarios'
+import {
+  LONGITUD_MAXIMA_NOMBRE_PERSONA,
+  MENSAJE_NOMBRE_PERSONA,
+  PATRON_NOMBRE_PERSONA,
+  REQUERIDO,
+} from '../../utilidades/validaciones'
 import estilos from '../Paginas.module.css'
 import { useActualizarUsuario, useCambiarContrasena, useCrearUsuario } from './consultasUsuarios'
 
-const REQUERIDO = 'Este campo es obligatorio.'
-const LONGITUD_MAXIMA_NOMBRE_COMPLETO = 100
 const LONGITUD_MINIMA_CONTRASENA = 8
 const LONGITUD_MAXIMA_CONTRASENA = 128
 const PATRON_NOMBRE_USUARIO = /^[a-zA-Z0-9._-]{3,50}$/
 
-const nombreCompleto = z.string().trim().min(1, REQUERIDO).max(LONGITUD_MAXIMA_NOMBRE_COMPLETO, `Máximo ${LONGITUD_MAXIMA_NOMBRE_COMPLETO} caracteres.`)
+// Misma regla que el servidor (ReglasNombrePersona).
+const nombreCompleto = z
+  .string()
+  .trim()
+  .min(1, REQUERIDO)
+  .max(LONGITUD_MAXIMA_NOMBRE_PERSONA, `Máximo ${LONGITUD_MAXIMA_NOMBRE_PERSONA} caracteres.`)
+  .regex(PATRON_NOMBRE_PERSONA, MENSAJE_NOMBRE_PERSONA)
 
 const contrasena = z
   .string()
