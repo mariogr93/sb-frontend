@@ -1,0 +1,12 @@
+.paginacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.paginacion div {
+  display: flex;
+  gap: 8px;
+}
