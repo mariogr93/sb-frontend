@@ -92,3 +92,14 @@
   min-width: 0;
   height: auto;
 }
+
+@media (max-width: 768px) {
+  .barra input:not([type='checkbox']),
+  .barra select {
+    width: 100%;
+  }
+
+  .espacio {
+    margin-left: 0;
+  }
+}
