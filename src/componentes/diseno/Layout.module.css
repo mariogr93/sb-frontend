@@ -5,12 +5,16 @@
 
 .principal {
   flex: 1;
+  min-width: 0;
   display: flex;
   flex-direction: column;
   background: var(--color-azul);
 }
 
 .encabezado {
+  display: flex;
+  align-items: center;
+  gap: 12px;
   color: var(--color-blanco);
   padding: 24px 32px;
 }
@@ -19,6 +23,18 @@
   margin: 0;
   font-size: 28px;
   font-weight: 600;
+}
+
+.botonMenu {
+  display: none;
+  width: 44px;
+  height: 44px;
+  border: 0;
+  border-radius: 10px;
+  background: var(--color-azul-activo);
+  color: var(--color-blanco);
+  font-size: 22px;
+  cursor: pointer;
 }
 
 .area {
@@ -34,4 +50,41 @@
   box-shadow: var(--sombra);
   padding: 32px;
   min-height: 460px;
+}
+
+.fondoMenu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .botonMenu {
+    display: inline-block;
+  }
+
+  .encabezado {
+    padding: 16px;
+  }
+
+  .encabezado h1 {
+    font-size: 20px;
+  }
+
+  .area {
+    padding: 12px;
+    border-top-left-radius: 16px;
+    border-top-right-radius: 16px;
+  }
+
+  .tarjeta {
+    padding: 16px;
+    min-height: 0;
+  }
+
+  .fondoMenu {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background: rgba(13, 48, 72, 0.5);
+    z-index: 15;
+  }
 }

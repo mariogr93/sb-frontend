@@ -8,8 +8,10 @@
 }
 
 .caja {
-  width: 100%;
+  width: calc(100% - 32px);
   max-width: 420px;
+  max-height: 90vh;
+  overflow-y: auto;
   background: var(--color-blanco);
   border-radius: var(--radio);
   padding: 28px;

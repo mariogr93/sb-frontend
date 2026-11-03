@@ -17,12 +17,14 @@ const OPCIONES: Opcion[] = [
   { ruta: '/usuarios', etiqueta: 'Usuarios', soloAdministrador: true },
 ]
 
-export function BarraLateral() {
+type Props = { abierta: boolean; alCerrar: () => void }
+
+export function BarraLateral({ abierta, alCerrar }: Props) {
   const { sesion, esAdministrador, cerrarSesion } = useAutenticacion()
   const opcionesVisibles = OPCIONES.filter((opcion) => esAdministrador || !opcion.soloAdministrador)
 
   return (
-    <aside className={estilos.barra}>
+    <aside className={`${estilos.barra} ${abierta ? estilos.abierta : ''}`}>
       <img className={estilos.logo} src={logo} alt="Superintendencia de Bancos de la República Dominicana" />
       <nav className={estilos.menu}>
         {opcionesVisibles.map((opcion) => (
@@ -30,6 +32,7 @@ export function BarraLateral() {
             key={opcion.ruta}
             to={opcion.ruta}
             end={opcion.exacta}
+            onClick={alCerrar}
             className={({ isActive }) => `${estilos.opcion} ${isActive ? estilos.activa : ''}`}
           >
             {opcion.icono && <img src={opcion.icono} alt="" width={24} height={24} />}

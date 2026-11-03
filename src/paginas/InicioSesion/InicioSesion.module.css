@@ -15,13 +15,17 @@
   padding: 32px;
 }
 
+@media (max-width: 480px) {
+  .tarjeta {
+    padding: 24px 16px;
+  }
+}
+
 .logo {
   display: block;
-  width: 180px;
+  width: 200px;
+  max-width: 100%;
   margin: 0 auto 16px;
-  background: var(--color-azul-solido);
-  padding: 12px;
-  border-radius: 12px;
 }
 
 .tarjeta h1 {
