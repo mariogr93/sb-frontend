@@ -1,27 +1,31 @@
 import { NavLink } from 'react-router-dom'
+import { useAutenticacion } from '../../autenticacion/useAutenticacion'
 import logo from '../../recursos/SUPERINTENDENCIA_DE_BANCOS.png'
 import iconoInicio from '../../recursos/home.svg'
 import estilos from './BarraLateral.module.css'
 
-type Opcion = { ruta: string; etiqueta: string; exacta?: boolean; icono?: string }
+type Opcion = { ruta: string; etiqueta: string; exacta?: boolean; icono?: string; soloAdministrador?: boolean }
 
 const OPCIONES: Opcion[] = [
   { ruta: '/', etiqueta: 'Inicio', exacta: true, icono: iconoInicio },
   { ruta: '/empleados', etiqueta: 'Consulta', exacta: true },
-  { ruta: '/empleados/nuevo', etiqueta: 'Crear registro' },
+  { ruta: '/empleados/nuevo', etiqueta: 'Crear registro', soloAdministrador: true },
   { ruta: '/reporte-semanal', etiqueta: 'Reporte semanal' },
   { ruta: '/nominas', etiqueta: 'Nóminas' },
   { ruta: '/entidades-gubernamentales', etiqueta: 'Entidades gubernamentales' },
   { ruta: '/departamentos', etiqueta: 'Departamentos' },
-  { ruta: '/usuarios', etiqueta: 'Usuarios' },
+  { ruta: '/usuarios', etiqueta: 'Usuarios', soloAdministrador: true },
 ]
 
 export function BarraLateral() {
+  const { sesion, esAdministrador, cerrarSesion } = useAutenticacion()
+  const opcionesVisibles = OPCIONES.filter((opcion) => esAdministrador || !opcion.soloAdministrador)
+
   return (
     <aside className={estilos.barra}>
       <img className={estilos.logo} src={logo} alt="Superintendencia de Bancos de la República Dominicana" />
       <nav className={estilos.menu}>
-        {OPCIONES.map((opcion) => (
+        {opcionesVisibles.map((opcion) => (
           <NavLink
             key={opcion.ruta}
             to={opcion.ruta}
@@ -33,6 +37,12 @@ export function BarraLateral() {
           </NavLink>
         ))}
       </nav>
+      <div className={estilos.sesion}>
+        <span>{sesion?.nombreCompleto}</span>
+        <button type="button" onClick={cerrarSesion}>
+          Cerrar sesión
+        </button>
+      </div>
     </aside>
   )
 }

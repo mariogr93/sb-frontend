@@ -1,0 +1,9 @@
+.alerta {
+  margin-bottom: 16px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  background: #fff0f0;
+  border: 1px solid var(--color-error);
+  color: var(--color-error);
+  font-size: 14px;
+}
