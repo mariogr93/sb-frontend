@@ -1,0 +1,28 @@
+.fondo {
+  position: fixed;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  background: rgba(13, 48, 72, 0.5);
+  z-index: 10;
+}
+
+.caja {
+  width: 100%;
+  max-width: 420px;
+  background: var(--color-blanco);
+  border-radius: var(--radio);
+  padding: 28px;
+}
+
+.caja h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 20px;
+}
