@@ -8,5 +8,7 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: './src/pruebas/configuracion.ts',
     globals: true,
+    // Zona de la República Dominicana: las pruebas de fechas dependen de ella.
+    env: { TZ: 'America/Santo_Domingo' },
   },
 })
