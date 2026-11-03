@@ -19,6 +19,13 @@ export function mensajeError(error: unknown): string {
   return problema?.detail ?? problema?.title ?? MENSAJE_SIN_CONEXION
 }
 
+/** Como mensajeError, pero si el servidor devolvió errores de campo muestra el primero de cada uno. */
+export function mensajeErrorDetallado(error: unknown): string {
+  const errores = obtenerProblema(error)?.errors
+  const mensajes = errores ? Object.values(errores).map((lista) => lista[0]) : []
+  return mensajes.length > 0 ? mensajes.join(' ') : mensajeError(error)
+}
+
 // "Compensacion.SueldoPorHora" → "compensacion.sueldoPorHora"
 const aRutaCampo = (clave: string) =>
   clave
