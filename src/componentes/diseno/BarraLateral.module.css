@@ -1,6 +1,8 @@
 .barra {
   width: 336px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
   background: var(--color-azul-solido);
   padding: 20px 24px;
 }
@@ -37,4 +39,25 @@
 .activa {
   background: var(--color-azul-activo);
   padding-left: 12px;
+}
+
+.sesion {
+  margin-top: auto;
+  padding: 16px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--color-blanco);
+  font-size: 14px;
+}
+
+.sesion button {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-blanco);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
 }

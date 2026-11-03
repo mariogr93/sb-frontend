@@ -1,0 +1,29 @@
+.boton {
+  height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 10px;
+  font: inherit;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.boton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.primario {
+  background: var(--color-azul-solido);
+  color: var(--color-blanco);
+}
+
+.secundario {
+  background: var(--color-gris);
+  color: var(--color-texto);
+}
+
+.peligro {
+  background: var(--color-error);
+  color: var(--color-blanco);
+}
