@@ -1,0 +1,37 @@
+.contenedor {
+  display: flex;
+  min-height: 100vh;
+}
+
+.principal {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-azul);
+}
+
+.encabezado {
+  color: var(--color-blanco);
+  padding: 24px 32px;
+}
+
+.encabezado h1 {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 600;
+}
+
+.area {
+  flex: 1;
+  background: var(--color-gris);
+  border-top-left-radius: var(--radio);
+  padding: 32px;
+}
+
+.tarjeta {
+  background: var(--color-blanco);
+  border-radius: var(--radio);
+  box-shadow: var(--sombra);
+  padding: 32px;
+  min-height: 460px;
+}
