@@ -1,5 +1,5 @@
 import { AxiosError, type AxiosResponse } from 'axios'
-import { aplicarErroresServidor, mensajeError } from './errores'
+import { aplicarErroresServidor, mensajeError, mensajeErrorDetallado } from './errores'
 
 function crearError(estado: number, datos: unknown) {
   return new AxiosError('fallo', undefined, undefined, undefined, { status: estado, data: datos } as AxiosResponse)
@@ -24,6 +24,13 @@ test('ErroresDeCampoAnidadosSeAplicanEnMinusculaInicial', () => {
   expect(hubo).toBe(true)
   expect(setError).toHaveBeenCalledWith('compensacion.sueldoPorHora', { type: 'servidor', message: 'Debe ser mayor que 0.' })
   expect(setError).toHaveBeenCalledWith('cedula', { type: 'servidor', message: 'Formato inválido.' })
+})
+
+test('MensajeDetalladoUneElPrimerErrorDeCadaCampoOUsaElMensajeGeneral', () => {
+  const conCampos = crearError(400, { errors: { FechaInicioSemana: ['Debe ser lunes.', 'Otra.'], Otro: ['Dato inválido.'] } })
+
+  expect(mensajeErrorDetallado(conCampos)).toBe('Debe ser lunes. Dato inválido.')
+  expect(mensajeErrorDetallado(crearError(409, { detail: 'Ya existe.' }))).toBe('Ya existe.')
 })
 
 test('SinErroresDeCampoDevuelveFalso', () => {

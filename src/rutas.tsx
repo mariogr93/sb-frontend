@@ -1,28 +1,33 @@
 import { createBrowserRouter, type RouteObject } from 'react-router-dom'
 import { RutaProtegida } from './autenticacion/RutaProtegida'
 import { Layout } from './componentes/diseno/Layout'
-import { InicioSesion } from './paginas/InicioSesion/InicioSesion'
+import { Departamentos } from './paginas/Departamentos/Departamentos'
 import { ConsultaEmpleados } from './paginas/Empleados/ConsultaEmpleados'
 import { DetalleEmpleado } from './paginas/Empleados/DetalleEmpleado'
 import { FormularioEmpleado } from './paginas/Empleados/FormularioEmpleado'
-import { Pendiente } from './paginas/Pendiente'
+import { EntidadesGubernamentales } from './paginas/EntidadesGubernamentales/EntidadesGubernamentales'
+import { Inicio } from './paginas/Inicio/Inicio'
+import { InicioSesion } from './paginas/InicioSesion/InicioSesion'
+import { DetalleNomina } from './paginas/Nominas/DetalleNomina'
+import { Nominas } from './paginas/Nominas/Nominas'
+import { ReporteSemanal } from './paginas/Nominas/ReporteSemanal'
+import { Usuarios } from './paginas/Usuarios/Usuarios'
 
-// Placeholders: cada paso del plan reemplaza una página por la real.
 const paginasParaTodos: RouteObject[] = [
-  { path: '/', element: <Pendiente />, handle: { titulo: 'Inicio' } },
+  { path: '/', element: <Inicio />, handle: { titulo: 'Inicio' } },
   { path: '/empleados', element: <ConsultaEmpleados />, handle: { titulo: 'Consulta de empleados' } },
   { path: '/empleados/:id', element: <DetalleEmpleado />, handle: { titulo: 'Detalle del empleado' } },
-  { path: '/reporte-semanal', element: <Pendiente />, handle: { titulo: 'Reporte semanal' } },
-  { path: '/nominas', element: <Pendiente />, handle: { titulo: 'Nóminas' } },
-  { path: '/nominas/:id', element: <Pendiente />, handle: { titulo: 'Detalle de nómina' } },
-  { path: '/entidades-gubernamentales', element: <Pendiente />, handle: { titulo: 'Entidades gubernamentales' } },
-  { path: '/departamentos', element: <Pendiente />, handle: { titulo: 'Departamentos' } },
+  { path: '/reporte-semanal', element: <ReporteSemanal />, handle: { titulo: 'Reporte semanal' } },
+  { path: '/nominas', element: <Nominas />, handle: { titulo: 'Nóminas' } },
+  { path: '/nominas/:id', element: <DetalleNomina />, handle: { titulo: 'Detalle de nómina' } },
+  { path: '/entidades-gubernamentales', element: <EntidadesGubernamentales />, handle: { titulo: 'Entidades gubernamentales' } },
+  { path: '/departamentos', element: <Departamentos />, handle: { titulo: 'Departamentos' } },
 ]
 
 const paginasSoloAdministrador: RouteObject[] = [
   { path: '/empleados/nuevo', element: <FormularioEmpleado />, handle: { titulo: 'Crear registro' } },
   { path: '/empleados/:id/editar', element: <FormularioEmpleado />, handle: { titulo: 'Editar empleado' } },
-  { path: '/usuarios', element: <Pendiente />, handle: { titulo: 'Usuarios' } },
+  { path: '/usuarios', element: <Usuarios />, handle: { titulo: 'Usuarios' } },
 ]
 
 export const rutas: RouteObject[] = [
