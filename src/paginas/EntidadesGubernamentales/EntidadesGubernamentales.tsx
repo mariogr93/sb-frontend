@@ -9,7 +9,7 @@ import { Paginacion } from '../../componentes/comunes/Paginacion'
 import { Tabla, type Columna } from '../../componentes/comunes/Tabla'
 import type { EntidadGubernamental, FiltroEntidadesGubernamentales } from '../../tipos/catalogos'
 import estilos from '../Paginas.module.css'
-import { useDesactivarEntidad, useEntidades } from './consultasEntidades'
+import { useActivarEntidad, useDesactivarEntidad, useEntidades } from './consultasEntidades'
 import { FormularioEntidad } from './FormularioEntidad'
 
 const TAMANO_PAGINA = 20
@@ -23,6 +23,7 @@ export function EntidadesGubernamentales() {
   const [aDesactivar, setADesactivar] = useState<EntidadGubernamental | null>(null)
   const { data, isPending, isError, error } = useEntidades(filtro)
   const desactivar = useDesactivarEntidad()
+  const activar = useActivarEntidad()
 
   // Si la página pedida ya no existe (p. ej. se desactivó la última fila), vuelve a la última.
   const paginaFueraDeRango = Boolean(data && data.totalElementos > 0 && data.elementos.length === 0)
@@ -58,9 +59,13 @@ export function EntidadesGubernamentales() {
                 <button type="button" className={estilos.enlace} onClick={() => setEdicion(entidad)}>
                   Editar
                 </button>
-                {entidad.estaActiva && (
+                {entidad.estaActiva ? (
                   <button type="button" className={`${estilos.enlace} ${estilos.peligro}`} onClick={() => setADesactivar(entidad)}>
                     Desactivar
+                  </button>
+                ) : (
+                  <button type="button" className={estilos.enlace} onClick={() => activar.mutate(entidad.id)}>
+                    Reactivar
                   </button>
                 )}
               </div>
@@ -115,6 +120,7 @@ export function EntidadesGubernamentales() {
       </form>
 
       {desactivar.isError && <Alerta>{mensajeError(desactivar.error)}</Alerta>}
+      {activar.isError && <Alerta>{mensajeError(activar.error)}</Alerta>}
       {isPending && <Cargando />}
       {isError && <Alerta>{mensajeError(error)}</Alerta>}
       {data && data.totalElementos === 0 && <p>No hay entidades con esos filtros.</p>}

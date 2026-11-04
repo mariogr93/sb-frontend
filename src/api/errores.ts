@@ -33,12 +33,28 @@ const aRutaCampo = (clave: string) =>
     .map((parte) => parte.charAt(0).toLowerCase() + parte.slice(1))
     .join('.')
 
-/** Pone los errores 400 del servidor en los campos del formulario. Devuelve true si hubo errores de campo. */
-export function aplicarErroresServidor<T extends FieldValues>(error: unknown, setError: UseFormSetError<T>): boolean {
+/**
+ * Pone los errores 400 del servidor en los campos del formulario. Devuelve true si hubo errores de campo.
+ * Si se pasan `camposConocidos`, los errores de claves que no son campos del formulario
+ * (p. ej. "solicitud" o "$.compensacion") van a una alerta general en lugar de perderse.
+ */
+export function aplicarErroresServidor<T extends FieldValues>(
+  error: unknown,
+  setError: UseFormSetError<T>,
+  camposConocidos?: readonly string[],
+): boolean {
   const errores = obtenerProblema(error)?.errors
   if (!errores) return false
-  Object.entries(errores).forEach(([clave, mensajes]) =>
-    setError(aRutaCampo(clave) as Path<T>, { type: 'servidor', message: mensajes[0] }),
-  )
+
+  const generales: string[] = []
+  Object.entries(errores).forEach(([clave, mensajes]) => {
+    const campo = aRutaCampo(clave)
+    if (camposConocidos && !camposConocidos.includes(campo)) {
+      generales.push(mensajes[0])
+      return
+    }
+    setError(campo as Path<T>, { type: 'servidor', message: mensajes[0] })
+  })
+  if (generales.length > 0) setError('root' as Path<T>, { type: 'servidor', message: generales.join(' ') })
   return true
 }

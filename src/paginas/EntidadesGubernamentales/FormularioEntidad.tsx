@@ -45,7 +45,9 @@ export function FormularioEntidad({ entidad, alCerrar }: Props) {
       await guardar.mutateAsync(datos)
       alCerrar()
     } catch (error) {
-      if (!aplicarErroresServidor(error, formulario.setError)) formulario.setError('root', { message: mensajeError(error) })
+      if (!aplicarErroresServidor(error, formulario.setError, Object.keys(esquema.shape))) {
+        formulario.setError('root', { message: mensajeError(error) })
+      }
     }
   })
 

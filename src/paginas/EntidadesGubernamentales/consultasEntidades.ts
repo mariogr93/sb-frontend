@@ -18,6 +18,11 @@ export function useGuardarEntidad(id?: string) {
   })
 }
 
+export function useActivarEntidad() {
+  const cliente = useQueryClient()
+  return useMutation({ mutationFn: entidadesApi.activar, onSuccess: () => cliente.invalidateQueries() })
+}
+
 export function useDesactivarEntidad() {
   const cliente = useQueryClient()
   return useMutation({ mutationFn: entidadesApi.desactivar, onSuccess: () => cliente.invalidateQueries() })

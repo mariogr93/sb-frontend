@@ -6,8 +6,10 @@ import { ConsultaEmpleados } from './paginas/Empleados/ConsultaEmpleados'
 import { DetalleEmpleado } from './paginas/Empleados/DetalleEmpleado'
 import { FormularioEmpleado } from './paginas/Empleados/FormularioEmpleado'
 import { EntidadesGubernamentales } from './paginas/EntidadesGubernamentales/EntidadesGubernamentales'
+import { ErrorInesperado } from './paginas/ErrorInesperado'
 import { Inicio } from './paginas/Inicio/Inicio'
 import { InicioSesion } from './paginas/InicioSesion/InicioSesion'
+import { NoEncontrado } from './paginas/NoEncontrado'
 import { DetalleNomina } from './paginas/Nominas/DetalleNomina'
 import { Nominas } from './paginas/Nominas/Nominas'
 import { ReporteSemanal } from './paginas/Nominas/ReporteSemanal'
@@ -31,15 +33,17 @@ const paginasSoloAdministrador: RouteObject[] = [
 ]
 
 export const rutas: RouteObject[] = [
-  { path: '/iniciar-sesion', element: <InicioSesion /> },
+  { path: '/iniciar-sesion', element: <InicioSesion />, errorElement: <ErrorInesperado /> },
   {
     element: <RutaProtegida />,
+    errorElement: <ErrorInesperado />,
     children: [
       {
         element: <Layout />,
         children: [
           ...paginasParaTodos,
           { element: <RutaProtegida soloAdministrador />, children: paginasSoloAdministrador },
+          { path: '*', element: <NoEncontrado />, handle: { titulo: 'Página no encontrada' } },
         ],
       },
     ],

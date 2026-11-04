@@ -45,13 +45,13 @@ Los crea la API al arrancar en desarrollo; las contraseñas están en `src/SB.Si
 | Menú | Ruta | Contenido |
 |---|---|---|
 | Inicio | `/` | Empleados activos, pago semanal total y totales por tipo. |
-| Consulta | `/empleados` | Lista con filtros (nombre, departamento, estado, tipo), paginación, pago semanal, ver, editar y desactivar. |
+| Consulta | `/empleados` | Lista con filtros (nombre, departamento, estado, tipo), paginación, pago semanal, ver, editar, desactivar y reactivar (Admin). |
 | Crear registro (Admin) | `/empleados/nuevo` | Formulario cuyos campos cambian según el tipo: asalariado, por horas, por comisión o asalariado por comisión. |
 | — | `/empleados/:id` | Datos del empleado y desglose del cálculo de su pago. |
 | Reporte semanal | `/reporte-semanal` | Pago de cada empleado activo con su desglose, totales por tipo, filtro por departamento e impresión. |
 | Nóminas | `/nominas` | Guardar la nómina de una semana (Admin, una por semana), historial y detalle. |
-| Entidades gubernamentales | `/entidades-gubernamentales` | Las 181 entidades: filtros, paginación y mantenimiento (Admin). |
-| Departamentos | `/departamentos` | Catálogo y mantenimiento (Admin). |
+| Entidades gubernamentales | `/entidades-gubernamentales` | Las 181 entidades: filtros, paginación y mantenimiento, con reactivación (Admin). |
+| Departamentos | `/departamentos` | Catálogo y mantenimiento, con reactivación (Admin). |
 | Usuarios (Admin) | `/usuarios` | Crear, editar, cambiar contraseña y desactivar. |
 
 Diseño según la maqueta: barra lateral azul `rgba(13, 48, 72, .9)`, área gris `rgba(237, 240, 247)`, tarjeta blanca redondeada, logo y icono de inicio de la Superintendencia de Bancos. En pantallas menores a 768 px la barra lateral es un menú deslizable.
@@ -84,7 +84,7 @@ Flujo: página → hook de consulta (`consultas*.ts`) → módulo `api/*` → `c
 npm test
 ```
 
-95 pruebas: formularios (campos por tipo, límites, errores del servidor bajo el campo correcto, creación y edición con carga exacta), consulta (filtros, paginación, desactivación con confirmación), guardas por rol, sesión (vencimiento, cierre, interceptor 401), nóminas, departamentos, usuarios, formato de moneda y fechas. Las APIs se simulan en el límite de `src/api/*`; las fechas se prueban en la zona de la República Dominicana.
+121 pruebas: formularios (campos por tipo, límites, errores del servidor bajo el campo correcto, creación y edición con carga exacta), consulta (filtros, paginación, desactivación con confirmación), guardas por rol, sesión (vencimiento, cierre, interceptor 401), nóminas, departamentos, usuarios, formato de moneda y fechas. Las APIs se simulan en el límite de `src/api/*`; las fechas se prueban en la zona de la República Dominicana.
 
 ## Scripts
 
