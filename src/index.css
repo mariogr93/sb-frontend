@@ -1,0 +1,23 @@
+:root {
+  --color-azul: rgba(13, 48, 72, 0.9);
+  --color-azul-solido: #0d3048;
+  --color-azul-activo: #1e3d55;
+  --color-gris: rgba(237, 240, 247);
+  --color-blanco: #ffffff;
+  --color-acento: #d9480f;
+  --color-error: #c92a2a;
+  --color-texto: #1f2937;
+  --radio: 24px;
+  --sombra: 0 2px 8px rgba(13, 48, 72, 0.08);
+  font-family: 'Saira', system-ui, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--color-azul-solido);
+  color: var(--color-texto);
+}

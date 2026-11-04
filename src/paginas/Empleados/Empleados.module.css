@@ -1,0 +1,79 @@
+.filtros {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.filtros input,
+.filtros select {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #cbd2e0;
+  border-radius: 10px;
+  font: inherit;
+  min-width: 200px;
+}
+
+.filaAcciones {
+  display: flex;
+  gap: 12px;
+}
+
+.enlace {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-error);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.formulario {
+  max-width: 760px;
+}
+
+.rejilla {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
+  column-gap: 24px;
+}
+
+@media (max-width: 768px) {
+  .filtros input,
+  .filtros select {
+    width: 100%;
+    min-width: 0;
+  }
+}
+
+.acciones {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.datos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 0 0 24px;
+}
+
+.datos dt {
+  font-size: 13px;
+  color: #5b6b7b;
+}
+
+.datos dd {
+  margin: 2px 0 0;
+  font-weight: 500;
+}
+
+.total {
+  text-align: right;
+  font-size: 18px;
+  font-weight: 600;
+}

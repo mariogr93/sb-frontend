@@ -1,0 +1,91 @@
+.barra {
+  width: 336px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-azul-solido);
+  padding: 20px 24px;
+}
+
+/* El logo es azul oscuro: se vuelve blanco para verse sobre la barra azul. */
+.logo {
+  display: block;
+  width: 210px;
+  margin-bottom: 20px;
+  filter: brightness(0) invert(1);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.opcion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 48px;
+  padding: 0 24px;
+  border-radius: 12px;
+  color: var(--color-blanco);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+}
+
+.opcion:hover {
+  background: var(--color-azul-activo);
+}
+
+.activa {
+  background: var(--color-azul-activo);
+  padding-left: 12px;
+}
+
+.sesion {
+  margin-top: auto;
+  padding: 16px 24px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--color-blanco);
+  font-size: 14px;
+}
+
+.sesion button {
+  align-self: flex-start;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-blanco);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Móvil: menú deslizable sobre el contenido. */
+@media (max-width: 768px) {
+  .barra {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 280px;
+    max-width: 85vw;
+    overflow-y: auto;
+    z-index: 20;
+    transform: translateX(-100%);
+    /* Cerrado: fuera de la pantalla y fuera del orden de tabulación. */
+    visibility: hidden;
+    transition:
+      transform 0.2s ease,
+      visibility 0s linear 0.2s;
+  }
+
+  .abierta {
+    transform: translateX(0);
+    visibility: visible;
+    transition: transform 0.2s ease;
+  }
+}

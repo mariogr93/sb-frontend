@@ -1,0 +1,105 @@
+.barra {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.barra input,
+.barra select {
+  height: 42px;
+  padding: 0 12px;
+  border: 1px solid #cbd2e0;
+  border-radius: 10px;
+  font: inherit;
+}
+
+.espacio {
+  margin-left: auto;
+}
+
+.filaAcciones {
+  display: flex;
+  gap: 12px;
+}
+
+.enlace {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-azul-solido);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.peligro {
+  color: var(--color-error);
+}
+
+.acciones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.tarjetas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.tarjeta {
+  padding: 20px;
+  border-radius: 16px;
+  background: var(--color-gris);
+}
+
+.tarjeta span {
+  display: block;
+  font-size: 13px;
+  color: #5b6b7b;
+}
+
+.tarjeta strong {
+  display: block;
+  margin-top: 6px;
+  font-size: 24px;
+  color: var(--color-azul-solido);
+}
+
+.total {
+  text-align: right;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.desglose {
+  background: #f7f9fc;
+}
+
+.casilla {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+}
+
+.casilla input {
+  min-width: 0;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .barra input:not([type='checkbox']),
+  .barra select {
+    width: 100%;
+  }
+
+  .espacio {
+    margin-left: 0;
+  }
+}

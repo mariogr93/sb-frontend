@@ -1,0 +1,14 @@
+.paginacion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 16px;
+  font-size: 14px;
+}
+
+.paginacion div {
+  display: flex;
+  gap: 8px;
+}
