@@ -8,7 +8,7 @@ import { Confirmacion } from '../../componentes/comunes/Confirmacion'
 import { Tabla, type Columna } from '../../componentes/comunes/Tabla'
 import type { Departamento } from '../../tipos/catalogos'
 import estilos from '../Paginas.module.css'
-import { useDepartamentos, useDesactivarDepartamento } from './consultasDepartamentos'
+import { useActivarDepartamento, useDepartamentos, useDesactivarDepartamento } from './consultasDepartamentos'
 import { FormularioDepartamento } from './FormularioDepartamento'
 
 export function Departamentos() {
@@ -18,6 +18,7 @@ export function Departamentos() {
   const [aDesactivar, setADesactivar] = useState<Departamento | null>(null)
   const { data, isPending, isError, error } = useDepartamentos(incluirInactivos)
   const desactivar = useDesactivarDepartamento()
+  const activar = useActivarDepartamento()
 
   const columnas: Columna<Departamento>[] = [
     { titulo: 'Nombre', celda: (departamento) => departamento.nombre },
@@ -31,9 +32,13 @@ export function Departamentos() {
                 <button type="button" className={estilos.enlace} onClick={() => setEdicion(departamento)}>
                   Editar
                 </button>
-                {departamento.estaActivo && (
+                {departamento.estaActivo ? (
                   <button type="button" className={`${estilos.enlace} ${estilos.peligro}`} onClick={() => setADesactivar(departamento)}>
                     Desactivar
+                  </button>
+                ) : (
+                  <button type="button" className={estilos.enlace} onClick={() => activar.mutate(departamento.id)}>
+                    Reactivar
                   </button>
                 )}
               </div>
@@ -63,6 +68,7 @@ export function Departamentos() {
       </div>
 
       {desactivar.isError && <Alerta>{mensajeError(desactivar.error)}</Alerta>}
+      {activar.isError && <Alerta>{mensajeError(activar.error)}</Alerta>}
       {isPending && <Cargando />}
       {isError && <Alerta>{mensajeError(error)}</Alerta>}
       {data && <Tabla columnas={columnas} filas={data} clave={(departamento) => departamento.id} />}

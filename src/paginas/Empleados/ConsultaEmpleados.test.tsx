@@ -11,10 +11,11 @@ import type { Empleado } from '../../tipos/empleados'
 import { ConsultaEmpleados } from './ConsultaEmpleados'
 
 vi.mock('../../api/departamentosApi', () => ({ departamentosApi: { listar: vi.fn() } }))
-vi.mock('../../api/empleadosApi', () => ({ empleadosApi: { listar: vi.fn(), desactivar: vi.fn() } }))
+vi.mock('../../api/empleadosApi', () => ({ empleadosApi: { listar: vi.fn(), desactivar: vi.fn(), activar: vi.fn() } }))
 
 const listar = vi.mocked(empleadosApi.listar)
 const desactivar = vi.mocked(empleadosApi.desactivar)
+const activar = vi.mocked(empleadosApi.activar)
 
 const pagina = (elementos: Empleado[], extra: Partial<ResultadoPaginado<Empleado>> = {}): ResultadoPaginado<Empleado> => ({
   elementos,
@@ -34,6 +35,7 @@ beforeEach(() => {
   vi.mocked(departamentosApi.listar).mockResolvedValue([{ id: 'd1', nombre: 'Ventas', estaActivo: true }])
   listar.mockResolvedValue(pagina([crearEmpleado()]))
   desactivar.mockResolvedValue(undefined)
+  activar.mockResolvedValue(undefined)
 })
 
 test('MuestraEmpleadosConSuPagoSemanal', async () => {
@@ -71,6 +73,46 @@ test('UnEmpleadoInactivoNoOfreceDesactivar', async () => {
 
   expect(screen.getByRole('link', { name: 'Editar' })).toBeInTheDocument()
   expect(screen.queryByRole('button', { name: 'Desactivar' })).not.toBeInTheDocument()
+})
+
+test('AdministradorReactivaUnEmpleadoInactivoYSeRefrescaLaLista', async () => {
+  listar.mockResolvedValue(pagina([crearEmpleado({ estado: 'Inactivo' })]))
+  renderizarConProveedores(<ConsultaEmpleados />, { rol: 'Admin' })
+  const botonReactivar = await screen.findByRole('button', { name: 'Reactivar' })
+  listar.mockClear()
+
+  await userEvent.click(botonReactivar)
+
+  await waitFor(() => expect(activar).toHaveBeenCalledTimes(1))
+  expect(activar.mock.calls[0][0]).toBe('e1')
+  await waitFor(() => expect(listar).toHaveBeenCalled())
+})
+
+test('UnEmpleadoActivoNoOfreceReactivar', async () => {
+  renderizarConProveedores(<ConsultaEmpleados />, { rol: 'Admin' })
+
+  await screen.findByText('Ana Pérez')
+
+  expect(screen.queryByRole('button', { name: 'Reactivar' })).not.toBeInTheDocument()
+})
+
+test('UsuarioNoVeReactivarEnUnEmpleadoInactivo', async () => {
+  listar.mockResolvedValue(pagina([crearEmpleado({ estado: 'Inactivo' })]))
+  renderizarConProveedores(<ConsultaEmpleados />, { rol: 'Usuario' })
+
+  await screen.findByText('Ana Pérez')
+
+  expect(screen.queryByRole('button', { name: 'Reactivar' })).not.toBeInTheDocument()
+})
+
+test('SiReactivarFallaPorDepartamentoInactivoMuestraElMensajeDelServidor', async () => {
+  listar.mockResolvedValue(pagina([crearEmpleado({ estado: 'Inactivo' })]))
+  activar.mockRejectedValue(errorServidor(422, 'No se puede reactivar un empleado cuyo departamento está inactivo.'))
+  renderizarConProveedores(<ConsultaEmpleados />, { rol: 'Admin' })
+
+  await userEvent.click(await screen.findByRole('button', { name: 'Reactivar' }))
+
+  expect(await screen.findByRole('alert')).toHaveTextContent('cuyo departamento está inactivo')
 })
 
 test('SinResultadosMuestraMensaje', async () => {

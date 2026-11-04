@@ -33,6 +33,18 @@ test('MensajeDetalladoUneElPrimerErrorDeCadaCampoOUsaElMensajeGeneral', () => {
   expect(mensajeErrorDetallado(crearError(409, { detail: 'Ya existe.' }))).toBe('Ya existe.')
 })
 
+test('ClavesQueNoSonCamposVanAUnaAlertaGeneralEnVezDePerderse', () => {
+  const setError = vi.fn()
+  const error = crearError(400, { errors: { '$.compensacion.salarioSemanal': ['Valor inválido.'], Cedula: ['Formato inválido.'] } })
+
+  const hubo = aplicarErroresServidor(error, setError, ['cedula'])
+
+  expect(hubo).toBe(true)
+  expect(setError).toHaveBeenCalledWith('cedula', { type: 'servidor', message: 'Formato inválido.' })
+  expect(setError).toHaveBeenCalledWith('root', { type: 'servidor', message: 'Valor inválido.' })
+  expect(setError).toHaveBeenCalledTimes(2)
+})
+
 test('SinErroresDeCampoDevuelveFalso', () => {
   expect(aplicarErroresServidor(crearError(409, { title: 'Conflicto.' }), vi.fn())).toBe(false)
 })

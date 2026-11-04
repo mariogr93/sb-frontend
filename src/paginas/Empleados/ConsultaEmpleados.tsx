@@ -18,7 +18,7 @@ import {
 } from '../../tipos/empleados'
 import { formatearMoneda } from '../../utilidades/formato'
 import { useDepartamentos } from '../Departamentos/consultasDepartamentos'
-import { useDesactivarEmpleado, useEmpleados } from './consultasEmpleados'
+import { useActivarEmpleado, useDesactivarEmpleado, useEmpleados } from './consultasEmpleados'
 import estilos from './Empleados.module.css'
 
 const TAMANO_PAGINA = 20
@@ -44,6 +44,7 @@ export function ConsultaEmpleados() {
   const { data, isPending, isError, error } = useEmpleados(filtro)
   const { data: departamentos = [] } = useDepartamentos(true)
   const desactivar = useDesactivarEmpleado()
+  const activar = useActivarEmpleado()
 
   // El filtro vive en la URL: se puede compartir y sobrevive al refresco.
   const actualizar = (cambios: Record<string, string | undefined>) =>
@@ -91,9 +92,13 @@ export function ConsultaEmpleados() {
           {esAdministrador && (
             <>
               <Link to={`/empleados/${empleado.id}/editar`}>Editar</Link>
-              {empleado.estado === 'Activo' && (
+              {empleado.estado === 'Activo' ? (
                 <button type="button" className={estilos.enlace} onClick={() => setADesactivar(empleado)}>
                   Desactivar
+                </button>
+              ) : (
+                <button type="button" className={estilos.enlaceNeutro} onClick={() => activar.mutate(empleado.id)}>
+                  Reactivar
                 </button>
               )}
             </>
@@ -145,6 +150,7 @@ export function ConsultaEmpleados() {
       </div>
 
       {desactivar.isError && <Alerta>{mensajeError(desactivar.error)}</Alerta>}
+      {activar.isError && <Alerta>{mensajeError(activar.error)}</Alerta>}
       {isPending && <Cargando />}
       {isError && <Alerta>{mensajeError(error)}</Alerta>}
       {data && data.totalElementos === 0 && <p>No hay empleados con esos filtros.</p>}

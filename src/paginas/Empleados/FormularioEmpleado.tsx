@@ -20,6 +20,14 @@ import { aDatosFormulario, esquemaEmpleado, type DatosFormularioEmpleado } from 
 import estilos from './Empleados.module.css'
 
 const TODOS_LOS_CAMPOS = Object.keys(ETIQUETAS_CAMPO) as CampoCompensacion[]
+const CAMPOS_DEL_FORMULARIO = [
+  'primerNombre',
+  'apellidoPaterno',
+  'cedula',
+  'departamentoId',
+  'tipo',
+  ...TODOS_LOS_CAMPOS.map((campo) => `compensacion.${campo}`),
+]
 
 // Inputs numéricos: '' → undefined (si no, NaN rompe la validación).
 const numero = { setValueAs: (valor: string) => (valor === '' || valor === undefined ? undefined : Number(valor)) }
@@ -61,7 +69,7 @@ export function FormularioEmpleado() {
       const guardado = await guardar.mutateAsync({ ...datos, compensacion })
       navegar(`/empleados/${guardado.id}`)
     } catch (error) {
-      if (!aplicarErroresServidor(error, formulario.setError)) {
+      if (!aplicarErroresServidor(error, formulario.setError, CAMPOS_DEL_FORMULARIO)) {
         formulario.setError('root', { message: mensajeError(error) })
       }
     }

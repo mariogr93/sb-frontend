@@ -31,6 +31,14 @@ export function useGuardarEmpleado(id?: string) {
   })
 }
 
+export function useActivarEmpleado() {
+  const cliente = useQueryClient()
+  return useMutation({
+    mutationFn: empleadosApi.activar,
+    onSuccess: () => cliente.invalidateQueries(),
+  })
+}
+
 export function useDesactivarEmpleado() {
   const cliente = useQueryClient()
   return useMutation({
