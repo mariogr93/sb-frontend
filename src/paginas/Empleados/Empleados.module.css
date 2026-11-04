@@ -30,6 +30,16 @@
   cursor: pointer;
 }
 
+.enlaceNeutro {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--color-azul-solido);
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
 .formulario {
   max-width: 760px;
 }

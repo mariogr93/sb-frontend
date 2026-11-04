@@ -17,6 +17,11 @@ export function useGuardarDepartamento(id?: string) {
   })
 }
 
+export function useActivarDepartamento() {
+  const cliente = useQueryClient()
+  return useMutation({ mutationFn: departamentosApi.activar, onSuccess: () => cliente.invalidateQueries() })
+}
+
 export function useDesactivarDepartamento() {
   const cliente = useQueryClient()
   return useMutation({ mutationFn: departamentosApi.desactivar, onSuccess: () => cliente.invalidateQueries() })

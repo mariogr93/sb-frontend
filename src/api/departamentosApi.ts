@@ -12,4 +12,7 @@ export const departamentosApi = {
   desactivar: async (id: string) => {
     await clienteHttp.delete(`${RUTA}/${id}`)
   },
+  activar: async (id: string) => {
+    await clienteHttp.put(`${RUTA}/${id}/activar`)
+  },
 }

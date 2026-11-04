@@ -59,12 +59,13 @@ async function enviarConErrores<T extends FieldValues>(
   formulario: UseFormReturn<T>,
   accion: () => Promise<unknown>,
   alCerrar: () => void,
+  camposConocidos: readonly string[],
 ) {
   try {
     await accion()
     alCerrar()
   } catch (error) {
-    if (!aplicarErroresServidor(error, formulario.setError)) {
+    if (!aplicarErroresServidor(error, formulario.setError, camposConocidos)) {
       formulario.setError('root', { message: mensajeError(error) })
     }
   }
@@ -87,7 +88,7 @@ export function FormularioCrearUsuario({ alCerrar }: PropsCierre) {
   const crear = useCrearUsuario()
   const formulario = useForm<DatosCrear>({ resolver: zodResolver(esquemaCrear), defaultValues: { rol: 'Usuario' } })
   const { errors, isSubmitting } = formulario.formState
-  const enviar = formulario.handleSubmit((datos) => enviarConErrores(formulario, () => crear.mutateAsync(datos), alCerrar))
+  const enviar = formulario.handleSubmit((datos) => enviarConErrores(formulario, () => crear.mutateAsync(datos), alCerrar, Object.keys(esquemaCrear.shape)))
 
   return (
     <Modal titulo="Nuevo usuario">
@@ -124,7 +125,7 @@ export function FormularioEditarUsuario({ usuario, alCerrar }: PropsCierre & { u
     defaultValues: { nombreCompleto: usuario.nombreCompleto, rol: usuario.rol, estaActivo: usuario.estaActivo },
   })
   const { errors, isSubmitting } = formulario.formState
-  const enviar = formulario.handleSubmit((datos) => enviarConErrores(formulario, () => actualizar.mutateAsync(datos), alCerrar))
+  const enviar = formulario.handleSubmit((datos) => enviarConErrores(formulario, () => actualizar.mutateAsync(datos), alCerrar, Object.keys(esquemaEditar.shape)))
 
   return (
     <Modal titulo={`Editar ${usuario.nombreUsuario}`}>
@@ -155,7 +156,7 @@ export function FormularioContrasena({ usuario, alCerrar }: PropsCierre & { usua
   const cambiar = useCambiarContrasena(usuario.id)
   const formulario = useForm<DatosContrasena>({ resolver: zodResolver(esquemaContrasena) })
   const { errors, isSubmitting } = formulario.formState
-  const enviar = formulario.handleSubmit((datos) => enviarConErrores(formulario, () => cambiar.mutateAsync(datos), alCerrar))
+  const enviar = formulario.handleSubmit((datos) => enviarConErrores(formulario, () => cambiar.mutateAsync(datos), alCerrar, Object.keys(esquemaContrasena.shape)))
 
   return (
     <Modal titulo={`Cambiar contraseña de ${usuario.nombreUsuario}`}>
